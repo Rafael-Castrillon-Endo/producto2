@@ -1,0 +1,69 @@
+{{!--
+  Plantilla del chat. Se renderiza dentro de layouts/main.handlebars
+  Ejemplo en Express:  res.render('chat', { title, publicidad, username, mensajes })
+--}}
+<main class="chat">
+
+  {{!-- 1. PUBLICIDAD --}}
+  <section class="ad" aria-label="Publicidad">
+    <div class="ad__track" id="adTrack">
+      {{#if publicidad}}
+        {{#each publicidad}}
+          <p class="ad__item">{{this}}</p>
+        {{/each}}
+      {{else}}
+        <p class="ad__item">Publicidad · Tu anuncio puede estar aquí</p>
+        <p class="ad__item">2x1 en cursos de programación este fin de semana</p>
+        <p class="ad__item">Aprende Handlebars + Socket.io en 7 días</p>
+      {{/if}}
+    </div>
+  </section>
+
+  {{!-- 2. USERNAME --}}
+  <section class="user">
+    <span class="user__label">Username:</span>
+    <span class="user__name" id="userName">{{#if username}}{{username}}{{else}}Sin nombre{{/if}}</span>
+    <button type="button" class="user__edit" id="editName">Cambiar</button>
+  </section>
+
+  {{!-- 3. FORMULARIO: MENSAJE + ENVIAR --}}
+  <form class="send" id="chatForm" autocomplete="off">
+    <label for="msgInput" class="send__label">Mensaje:</label>
+    <input id="msgInput" name="mensaje" class="send__input" type="text"
+           placeholder="Ingrese el mensaje" maxlength="300" required>
+    <button type="submit" class="send__btn">Enviar</button>
+  </form>
+
+  {{!-- 4. CAJA DE MENSAJES (lo ven todos los conectados) --}}
+  <section class="board" aria-label="Mensajes">
+    <header class="board__head">
+      <span>Sala general</span>
+      <span class="board__online"><i class="dot"></i><b id="onlineCount">1</b> conectados</span>
+    </header>
+
+    <ul class="board__list" id="messages">
+      {{#each mensajes}}
+        <li class="msg">
+          <div class="msg__meta">
+            <span class="msg__author">{{this.username}}</span>
+            <time class="msg__time">{{this.hora}}</time>
+          </div>
+          <p class="msg__text">{{this.mensaje}}</p>
+        </li>
+      {{else}}
+        <li class="board__empty" id="emptyState">Todavía no hay mensajes. Escribe el primero.</li>
+      {{/each}}
+    </ul>
+  </section>
+
+</main>
+
+{{!-- Modal para poner el nombre --}}
+<dialog class="modal" id="nameModal">
+  <form method="dialog" class="modal__form" id="nameForm">
+    <h2 class="modal__title">¿Cómo te llamas?</h2>
+    <p class="modal__text">Tu nombre aparecerá en cada mensaje que envíes.</p>
+    <input id="nameInput" class="send__input" type="text" placeholder="Nombre" maxlength="24" required>
+    <button type="submit" class="send__btn">Entrar al chat</button>
+  </form>
+</dialog>

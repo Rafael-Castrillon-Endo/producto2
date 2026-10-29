@@ -1,0 +1,229 @@
+:root {
+  --bg: #3b4252;          /* gris pizarra como en el tablero */
+  --bg-deep: #2e3440;
+  --blue: #1e88e5;
+  --blue-deep: #1565c0;
+  --blue-soft: #64b5f6;
+  --ink: #eceff4;
+  --muted: #aab4c5;
+  --mine: #0d47a1;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 0%, #4c566a 0%, transparent 55%),
+    var(--bg);
+  color: var(--ink);
+  font-family: "DM Sans", system-ui, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+.chat {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ---------- 1. Publicidad ---------- */
+.ad {
+  width: 70%;
+  min-width: 280px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: linear-gradient(180deg, var(--blue) 0%, var(--blue-deep) 100%);
+  box-shadow: 0 6px 18px rgba(21, 101, 192, .45), inset 0 1px 0 rgba(255,255,255,.25);
+  position: relative;
+}
+.ad__track { transition: transform .6s cubic-bezier(.65,0,.35,1); }
+.ad__item {
+  height: 56px;
+  display: grid;
+  place-items: center;
+  font-family: "Sora", sans-serif;
+  font-weight: 600;
+  letter-spacing: .02em;
+  padding: 0 16px;
+  text-align: center;
+}
+
+/* ---------- 2. Username ---------- */
+.user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Sora", sans-serif;
+  font-weight: 700;
+}
+.user__label { color: var(--muted); font-weight: 600; }
+.user__edit {
+  margin-left: 6px;
+  background: none;
+  border: 1px solid rgba(255,255,255,.2);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.user__edit:hover { color: var(--ink); border-color: var(--blue-soft); }
+
+/* ---------- 3. Formulario ---------- */
+.send {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.send__label { font-family: "Sora", sans-serif; font-weight: 700; }
+.send__input {
+  flex: 1;
+  height: 44px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0 14px;
+  background: var(--blue);
+  color: #fff;
+  font: inherit;
+  font-weight: 500;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.25);
+}
+.send__input::placeholder { color: rgba(255,255,255,.75); }
+.send__input:focus { outline: none; border-color: #fff; background: var(--blue-deep); }
+
+.send__btn {
+  height: 44px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--blue);
+  color: #fff;
+  font-family: "Sora", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(30,136,229,.4);
+  transition: transform .1s, background .2s;
+}
+.send__btn:hover { background: var(--blue-deep); }
+.send__btn:active { transform: scale(.96); }
+.send__btn:focus-visible, .user__edit:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* ---------- 4. Caja de mensajes ---------- */
+.board {
+  width: 80%;
+  min-width: 280px;
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background:
+    repeating-radial-gradient(circle at 30% 120%, rgba(255,255,255,.05) 0 2px, transparent 2px 14px),
+    linear-gradient(160deg, var(--blue) 0%, var(--blue-deep) 100%);
+  box-shadow: 0 14px 40px rgba(0,0,0,.35);
+}
+.board__head {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  background: rgba(0,0,0,.18);
+}
+.board__online { display: flex; align-items: center; gap: 6px; font-weight: 500; }
+.dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #69f0ae;
+  box-shadow: 0 0 0 0 rgba(105,240,174,.7);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 70% { box-shadow: 0 0 0 7px rgba(105,240,174,0); } 100% { box-shadow: 0 0 0 0 rgba(105,240,174,0); } }
+
+.board__list {
+  list-style: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-behavior: smooth;
+}
+.board__list::-webkit-scrollbar { width: 6px; }
+.board__list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.3); border-radius: 3px; }
+
+.board__empty { margin: auto; color: rgba(255,255,255,.75); font-size: 14px; }
+
+/* Mensaje */
+.msg {
+  max-width: 78%;
+  align-self: flex-start;
+  background: rgba(255,255,255,.95);
+  color: #1b2533;
+  padding: 8px 12px;
+  border-radius: 12px 12px 12px 3px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  animation: pop .25s ease-out;
+}
+.msg--mine {
+  align-self: flex-end;
+  background: var(--mine);
+  color: #fff;
+  border-radius: 12px 12px 3px 12px;
+}
+.msg__meta { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; margin-bottom: 2px; }
+.msg__author { font-weight: 700; font-size: 13px; color: var(--blue-deep); }
+.msg--mine .msg__author { color: var(--blue-soft); }
+.msg__time { font-size: 11px; opacity: .6; }
+.msg__text { font-size: 15px; line-height: 1.4; word-wrap: break-word; }
+
+.msg--system {
+  align-self: center;
+  background: rgba(0,0,0,.2);
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  box-shadow: none;
+}
+
+@keyframes pop { from { opacity: 0; transform: translateY(6px) scale(.98); } }
+
+/* ---------- Modal nombre ---------- */
+.modal {
+  margin: auto;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--bg-deep);
+  color: var(--ink);
+  width: min(360px, 90vw);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+.modal::backdrop { background: rgba(15,20,30,.7); backdrop-filter: blur(3px); }
+.modal__form { display: flex; flex-direction: column; gap: 12px; padding: 24px; }
+.modal__title { font-family: "Sora", sans-serif; font-size: 20px; }
+.modal__text { color: var(--muted); font-size: 14px; }
+.modal .send__input { flex: none; }
+
+/* ---------- Móvil ---------- */
+@media (max-width: 560px) {
+  .ad, .board { width: 100%; }
+  .send { flex-wrap: wrap; }
+  .send__label { width: 100%; }
+  .board { height: 60vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
